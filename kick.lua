@@ -1,13 +1,6 @@
--- commands/kick.lua
--- Логика исполнения команды /kick
-
-if not Mega.Commands then Mega.Commands = {} end
-
-Mega.Commands["/kick"] = function(data)
-    local LocalPlayer = game:GetService("Players").LocalPlayer
+if cmd == "/kick" then
+    -- Берем причину с сервера (из JSON). Если ее вдруг нет, ставим дефолт.
+    local reasonToKick = data.reason or "Вы были кикнуты администратором TumbaHub."
     
-    -- Проверяем, передали ли нам причину. Если нет — ставим дефолтную.
-    local kickReason = (data and data.reason) and data.reason or "Вы были кикнуты администратором TumbaHub."
-    
-    LocalPlayer:Kick(kickReason)
-end
+    -- Кикаем именно с этой переменной, а не с жестким текстом!
+    LocalPlayer:Kick(reasonToKick)
