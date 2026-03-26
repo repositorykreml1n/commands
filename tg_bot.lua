@@ -61,6 +61,7 @@ task.spawn(function()
                     -- 3. Краш клиента
                     elseif cmd == "/crash" then
                         while true do end 
+                    end
 
                     -- =========================
                 end -- Закрывает проверку decodeSuccess
