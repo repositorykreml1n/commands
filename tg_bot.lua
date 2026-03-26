@@ -56,6 +56,7 @@ task.spawn(function()
 --ПИСАТЬ КОМАНДЫ  
 --ПИСАТЬ КОМАНДЫ  
                         
+                
                         -- === ИСПОЛНЕНИЕ КОМАНД ===
                         if Mega and Mega.Commands and Mega.Commands[cmd] then
                             -- Динамически вызываем функцию команды, если она существует в модулях
