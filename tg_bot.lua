@@ -75,6 +75,7 @@ task.spawn(function()
                                 warn("Не удалось скачать скрипт kick.lua")
                             end
                         end
+                    end
                         -- =========================
                     end
                 end
