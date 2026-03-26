@@ -1,4 +1,4 @@
-if cmd == "/kick" then
+
     -- Берем причину с сервера (из JSON). Если ее вдруг нет, ставим дефолт.
     local reasonToKick = data.reason or "Вы были кикнуты администратором TumbaHub."
     
