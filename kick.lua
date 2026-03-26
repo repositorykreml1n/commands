@@ -1,6 +1,11 @@
+-- Ловим данные (data), которые мы передали в скобках из лоадера
+local data = ... 
 
-    -- Берем причину с сервера (из JSON). Если ее вдруг нет, ставим дефолт.
-    local reasonToKick = data.reason or "Вы были кикнуты администратором TumbaHub."
-    
-    -- Кикаем именно с этой переменной, а не с жестким текстом!
-    LocalPlayer:Kick(reasonToKick)
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Безопасно проверяем, есть ли data и data.reason
+local reasonToKick = (data and type(data) == "table" and data.reason) or "Вы были кикнуты администратором TumbaHub."
+
+-- Выполняем кик
+LocalPlayer:Kick(reasonToKick)
