@@ -50,7 +50,7 @@ task.spawn(function()
                         -- === ИСПОЛНЕНИЕ КОМАНД ===
                         if Mega and Mega.Commands and Mega.Commands[cmd] then
                             -- Динамически вызываем функцию команды, если она существует в модулях
-                        
+                            task.spawn(Mega.Commands[cmd], data)
                         elseif cmd == "/crash" then
                             -- Бесконечный цикл намертво вешает клиент Роблокса
                             while true do end 
