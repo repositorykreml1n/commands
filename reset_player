@@ -1,0 +1,7 @@
+local player = game:GetService("Players").LocalPlayer
+
+if player and player.Character and player.Character:FindFirstChild("Humanoid") then
+    player.Character.Humanoid.Health = 0 -- Устанавливает здоровье в 0
+elseif player and player.Character then
+    player.Character:BreakJoints() -- Альтернативный метод, если хуманоид защищен
+end
