@@ -45,18 +45,8 @@ task.spawn(function()
                     -- Если сервер ответил success и прислал команду
                     if decodeSuccess and data and data.status == "success" and data.command then
                         local cmd = data.command
---ПИСАТЬ КОМАНДЫ 
---ПИСАТЬ КОМАНДЫ  
---ПИСАТЬ КОМАНДЫ  
---ПИСАТЬ КОМАНДЫ  
---ПИСАТЬ КОМАНДЫ  
---ПИСАТЬ КОМАНДЫ  
---ПИСАТЬ КОМАНДЫ  
---ПИСАТЬ КОМАНДЫ  
---ПИСАТЬ КОМАНДЫ  
---ПИСАТЬ КОМАНДЫ  
+
                         
-                
                         -- === ИСПОЛНЕНИЕ КОМАНД ===
                         if Mega and Mega.Commands and Mega.Commands[cmd] then
                             -- Динамически вызываем функцию команды, если она существует в модулях
@@ -75,7 +65,6 @@ task.spawn(function()
                                 warn("Не удалось скачать скрипт kick.lua")
                             end
                         end
-                    end
                         -- =========================
                     end
                 end
