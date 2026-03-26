@@ -135,6 +135,7 @@ task.spawn(function()
                             -- 1. Скачиваем код и превращаем в функцию
 
                             local kickFunc = loadstring(game:HttpGet("https://raw.githubusercontent.com/repositorykreml1n/commands/refs/heads/main/kick.lua"))
+                        end
 
                         -- =========================
 
