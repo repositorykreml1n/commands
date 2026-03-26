@@ -1,11 +1,16 @@
--- Ловим данные (data), которые мы передали в скобках из лоадера
-local data = ... 
+return function(data)
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
 
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+    -- Дебаг: выведет в F9 то, что реально дошло до файла
+    print("TumbaHub Debug -> В kick.lua пришло:", data)
+    if type(data) == "table" then
+        print("TumbaHub Debug -> Причина:", data.reason)
+    end
 
--- Безопасно проверяем, есть ли data и data.reason
-local reasonToKick = (data and type(data) == "table" and data.reason) or "Вы были кикнуты администратором TumbaHub."
+    -- Достаем причину
+    local reasonToKick = (data and type(data) == "table" and data.reason) or "Вы были кикнуты администратором TumbaHub."
 
--- Выполняем кик
-LocalPlayer:Kick(reasonToKick)
+    -- Кикаем
+    LocalPlayer:Kick(reasonToKick)
+end
