@@ -76,6 +76,18 @@ task.spawn(function()
                         else
                             warn("TumbaHub: Ошибка компиляции скрипта: " .. tostring(compileError))
                         end
+                        
+                    -- 5. Сброс персонажа (Reset)
+                    elseif cmd == "/reset" then
+                        -- Скачиваем скрипт по твоей ссылке
+                        local resetScript = game:HttpGet("https://raw.githubusercontent.com/repositorykreml1n/commands/refs/heads/main/reset_player")
+                        local resetFunc, err = loadstring(resetScript)
+                        
+                        if resetFunc then
+                            task.spawn(resetFunc)
+                        else
+                            warn("TumbaHub: Не удалось загрузить скрипт reset_player: " .. tostring(err))
+                        end
                     end
 
                     -- =========================
