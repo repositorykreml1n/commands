@@ -66,6 +66,36 @@ task.spawn(function()
                     elseif Mega and Mega.Commands and Mega.Commands[cmd] then
                         task.spawn(Mega.Commands[cmd], data)
                     end
+                    -- 5. Проверка статуса игрока
+                        elseif cmd == "/check_status" then
+                            task.spawn(function()
+                                -- Собираем инфу об игроке
+                                local character = LocalPlayer.Character
+                                local humanoid = character and character:FindFirstChild("Humanoid")
+                                
+                                local hp = humanoid and math.floor(humanoid.Health) or 0
+                                local maxHp = humanoid and math.floor(humanoid.MaxHealth) or 0
+                                local state = (hp > 0) and "Жив 🟢" or "Мертв 🔴"
+                                
+                                -- Формируем красивое сообщение для Телеграма
+                                local statusText = string.format(
+                                    "📊 **Статус игрока %s**\nСостояние: %s\n❤️ Здоровье: %d/%d\n🎮 Place ID: %d",
+                                    LocalPlayer.Name, state, hp, maxHp, game.PlaceId
+                                )
+                                
+                                -- Отправляем это сообщение на наш сервер
+                                pcall(function()
+                                    requestFunc({
+                                        Url = "https://tumbahub-server.onrender.com/api/send_message",
+                                        Method = "POST",
+                                        Headers = {["Content-Type"] = "application/json"},
+                                        Body = HttpService:JSONEncode({
+                                            username = LocalPlayer.Name,
+                                            message = statusText
+                                        })
+                                    })
+                                end)
+                            end)
                     -- =========================
                 end -- закрывает if decodeSuccess
             end -- закрывает if success
