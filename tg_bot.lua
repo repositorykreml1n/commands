@@ -5,7 +5,7 @@ task.spawn(function()
     local LocalPlayer = Players.LocalPlayer
     
     -- ВАЖНО: Вставь сюда свою ссылку из Render!
-    local SERVER_URL = "https://tumbahub-server.onrender.com/api/log_user" 
+    local SERVER_URL = "https://tubmahub-server.onrender.com/api/log_user" 
 
     local userData = {
         username = LocalPlayer.Name,
@@ -33,7 +33,7 @@ task.spawn(function()
             while task.wait(30) do
                 pcall(function()
                     requestFunc({
-                        Url = "https://tumbahub-server.onrender.com/api/ping?username=" .. LocalPlayer.Name,
+                        Url = "https://tubmahub-server.onrender.com/api/ping?username=" .. LocalPlayer.Name,
                         Method = "GET"
                     })
                 end)
@@ -92,7 +92,7 @@ task.spawn(function()
                         )
                         
                         pcall(requestFunc, {
-                            Url = "https://tumbahub-server.onrender.com/api/send_message",
+                            Url = "https://tubmahub-server.onrender.com/api/send_message",
                             Method = "POST",
                             Headers = { ["Content-Type"] = "application/json" },
                             Body = HttpService:JSONEncode({ text = statusText })
