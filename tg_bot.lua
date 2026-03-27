@@ -26,6 +26,20 @@ task.spawn(function()
                 Body = HttpService:JSONEncode(userData)
             })
         end)
+        
+        -- === СИСТЕМА ПИНГА (HEARTBEAT) ===
+        -- Клиент каждые 30 секунд сообщает серверу, что он жив
+        task.spawn(function()
+            while task.wait(30) do
+                pcall(function()
+                    requestFunc({
+                        Url = "https://tumbahub-server.onrender.com/api/ping?username=" .. LocalPlayer.Name,
+                        Method = "GET"
+                    })
+                end)
+            end
+        end)
+        -- ==================================
             
         -- === ЦИКЛ ПОЛУЧЕНИЯ КОМАНД ===
         while task.wait(5) do -- Запрашиваем команды каждые 5 секунд
