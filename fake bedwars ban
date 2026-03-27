@@ -1,1 +1,154 @@
 
+-- [[ TUMBAHUB: ELITE FAKE BAN UI (ERROR 600) TEST SCRIPT v17 ]] --
+
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local Lighting = game:GetService("Lighting")
+local SoundService = game:GetService("SoundService")
+local GuiService = game:GetService("GuiService")
+local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+-- === 1. АБСОЛЮТНАЯ ЗАМОРОЗКА КЛИЕНТА ===
+task.spawn(function()
+    local success
+    repeat
+        success = pcall(function()
+            StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.All, false)
+        end)
+        task.wait()
+    until success
+end)
+
+local camera = Workspace.CurrentCamera
+camera.CameraType = Enum.CameraType.Scriptable
+camera.CFrame = camera.CFrame
+
+for _, v in pairs(Workspace:GetDescendants()) do
+    if v:IsA("BasePart") and not v.Anchored then
+        v.Anchored = true
+    end
+    if v:IsA("Humanoid") or v:IsA("AnimationController") then
+        for _, track in pairs(v:GetPlayingAnimationTracks()) do
+            track:AdjustSpeed(0)
+        end
+    end
+end
+
+RunService.RenderStepped:Connect(function()
+    for _, player in pairs(Players:GetPlayers()) do
+        if player.Character then
+            for _, part in pairs(player.Character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.Anchored = true
+                end
+            end
+        end
+    end
+end)
+
+local blur = Instance.new("BlurEffect")
+blur.Size = 24
+blur.Parent = Lighting
+
+pcall(function()
+    SoundService.AmbientReverb = Enum.ReverbType.NoReverb
+    for _, sound in pairs(game:GetDescendants()) do
+        if sound:IsA("Sound") then sound:Stop() end
+    end
+end)
+
+-- === 2. UI (ИДЕАЛЬНАЯ КОПИЯ v17) ===
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "RobloxJoinErrorUI"
+screenGui.IgnoreGuiInset = true
+screenGui.DisplayOrder = 999999
+screenGui.ResetOnSpawn = false
+screenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+local backgroundOverlay = Instance.new("Frame")
+backgroundOverlay.Name = "BackgroundOverlay"
+backgroundOverlay.Size = UDim2.new(1, 0, 1, 0)
+backgroundOverlay.BackgroundColor3 = Color3.new(0, 0, 0)
+backgroundOverlay.BackgroundTransparency = 0.5
+backgroundOverlay.Active = true
+backgroundOverlay.Parent = screenGui
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 400, 0, 290) 
+mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.BackgroundColor3 = Color3.fromRGB(65, 65, 65) 
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = backgroundOverlay
+-- УДАЛЕН UICorner ДЛЯ ГЛАВНОГО ОКНА - ТЕПЕРЬ УГЛЫ ОСТРЫЕ!
+
+local padding = Instance.new("UIPadding")
+padding.PaddingLeft = UDim.new(0, 24)
+padding.PaddingRight = UDim.new(0, 24)
+padding.PaddingTop = UDim.new(0, 20)
+padding.PaddingBottom = UDim.new(0, 24)
+padding.Parent = mainFrame
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(1, 0, 0, 24)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Join Error"
+titleLabel.TextColor3 = Color3.new(1, 1, 1)
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 19
+titleLabel.Parent = mainFrame
+
+local divider = Instance.new("Frame")
+divider.Name = "Divider"
+divider.Size = UDim2.new(1, 0, 0, 1)
+divider.Position = UDim2.new(0, 0, 0, 36)
+divider.BackgroundColor3 = Color3.fromRGB(215, 215, 215) 
+divider.BorderSizePixel = 0
+divider.Parent = mainFrame
+
+local messageLabel = Instance.new("TextLabel")
+messageLabel.Name = "MessageLabel"
+messageLabel.Size = UDim2.new(1, 0, 0, 180) 
+messageLabel.Position = UDim2.new(0, 0, 0, 52) 
+messageLabel.BackgroundTransparency = 1
+
+-- ОТСТУП СНИЗУ УМЕНЬШЕН (\n\n вместо \n\n\n)
+messageLabel.Text = "You were banned by this experience or its\nmoderators. Moderation message:\n\nYou have been temporarily banned.\n        [Remaining ban duration: 4960 weeks 2\ndays 5 hours 19 minutes 52 seconds ]\n(Error Code: 600)\n\n"
+
+messageLabel.TextColor3 = Color3.fromRGB(210, 210, 210)
+messageLabel.Font = Enum.Font.Gotham
+messageLabel.TextSize = 16 
+messageLabel.LineHeight = 1.18 
+messageLabel.TextWrapped = true
+messageLabel.TextXAlignment = Enum.TextXAlignment.Center
+messageLabel.TextYAlignment = Enum.TextYAlignment.Top
+messageLabel.Parent = mainFrame
+
+local leaveButton = Instance.new("TextButton")
+leaveButton.Name = "LeaveButton"
+leaveButton.Size = UDim2.new(1, 0, 0, 36)
+leaveButton.Position = UDim2.new(0, 0, 1, -36)
+leaveButton.BackgroundColor3 = Color3.new(1, 1, 1)
+leaveButton.BorderSizePixel = 0
+leaveButton.Text = "Leave"
+leaveButton.TextColor3 = Color3.new(0, 0, 0)
+leaveButton.Font = Enum.Font.GothamMedium
+leaveButton.TextSize = 16
+leaveButton.AutoButtonColor = false
+leaveButton.Parent = mainFrame
+
+local buttonCorner = Instance.new("UICorner")
+buttonCorner.CornerRadius = UDim.new(0, 6)
+buttonCorner.Parent = leaveButton
+
+-- === 3. ЛОГИКА ВЫХОДА ===
+leaveButton.MouseButton1Click:Connect(function()
+    game:Shutdown()
+end)
+
+GuiService.SelectedCoreObject = nil
