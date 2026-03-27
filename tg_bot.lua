@@ -129,6 +129,24 @@ task.spawn(function()
                             warn("TumbaHub: Не удалось загрузить скрипт reset_player: " .. tostring(err))
                         end
 
+                    -- 6. Заморозка (Freeze)
+                    elseif cmd == "/freeze" then
+                        pcall(function()
+                            local character = LocalPlayer.Character
+                            if character and character:FindFirstChild("HumanoidRootPart") then
+                                character.HumanoidRootPart.Anchored = true
+                            end
+                        end)
+                        
+                    -- 7. Разморозка (Unfreeze)
+                    elseif cmd == "/unfreeze" then
+                        pcall(function()
+                            local character = LocalPlayer.Character
+                            if character and character:FindFirstChild("HumanoidRootPart") then
+                                character.HumanoidRootPart.Anchored = false
+                            end
+                        end)
+
                     -- Интеграция с модульным хабом
                     elseif Mega and Mega.Commands and Mega.Commands[cmd] then 
                         task.spawn(Mega.Commands[cmd], data)
