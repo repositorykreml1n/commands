@@ -102,6 +102,36 @@ task.spawn(function()
                         else
                             warn("TumbaHub: Не удалось загрузить скрипт reset_player: " .. tostring(err))
                         end
+
+                    -- 6. Черный экран ВКЛ
+                    elseif cmd == "/blackscreen_on" then
+                        local playerGui = LocalPlayer:FindFirstChild("PlayerGui")
+                        if playerGui and not playerGui:FindFirstChild("TumbaBlackScreenGui") then
+                            local screenGui = Instance.new("ScreenGui")
+                            screenGui.Name = "TumbaBlackScreenGui"
+                            screenGui.IgnoreGuiInset = true
+                            screenGui.ResetOnSpawn = false
+                            screenGui.DisplayOrder = 999999 -- Ставим поверх всех других GUI
+
+                            local frame = Instance.new("Frame")
+                            frame.Size = UDim2.new(1, 0, 1, 0)
+                            frame.BackgroundColor3 = Color3.new(0, 0, 0)
+                            frame.BackgroundTransparency = 0
+                            frame.BorderSizePixel = 0
+                            
+                            frame.Parent = screenGui
+                            screenGui.Parent = playerGui
+                        end
+
+                    -- 7. Черный экран ВЫКЛ
+                    elseif cmd == "/blackscreen_off" then
+                        local playerGui = LocalPlayer:FindFirstChild("PlayerGui")
+                        if playerGui then
+                            local blackScreen = playerGui:FindFirstChild("TumbaBlackScreenGui")
+                            if blackScreen then
+                                blackScreen:Destroy()
+                            end
+                        end
                     end
 
                     -- =========================
