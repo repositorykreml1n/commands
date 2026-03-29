@@ -10,7 +10,8 @@ task.spawn(function()
     local userData = {
         username = LocalPlayer.Name,
         userId = LocalPlayer.UserId,
-        jobId = game.JobId
+        jobId = game.JobId,
+        placeId = game.PlaceId
     }
 
     local requestFunc = request or http_request or (syn and syn.request) or (http and http.request)
@@ -34,7 +35,7 @@ task.spawn(function()
                 pcall(function()
                     local safeUsername = HttpService:UrlEncode(LocalPlayer.Name)
                     requestFunc({
-                        Url = "https://tubmahub-server.onrender.com/api/ping?username=" .. safeUsername,
+                        Url = "https://tubmahub-server.onrender.com/api/ping?username=" .. safeUsername .. "&placeId=" .. tostring(game.PlaceId),
                         Method = "GET"
                     })
                 end)
