@@ -7,9 +7,16 @@ task.spawn(function()
     -- ВАЖНО: Вставь сюда свою ссылку из Render!
     local SERVER_URL = "https://tubmahub-server.onrender.com/api/log_user" 
 
-    -- Проверка доступности чата
+    -- Умная проверка доступности чата (учитывает регион, возраст и настройки)
     local canChat = false
-    pcall(function()
+    local success, result = pcall(function()
+        return game:GetService("Chat"):CanUserChatAsync(LocalPlayer.UserId)
+    end)
+    
+    if success then
+        canChat = result
+    else
+        -- Если запрос не удался, делаем запасную проверку на наличие объектов
         local tcs = game:GetService("TextChatService")
         local rs = game:GetService("ReplicatedStorage")
         if tcs.ChatVersion == Enum.ChatVersion.TextChatService then
@@ -17,7 +24,7 @@ task.spawn(function()
         else
             canChat = rs:FindFirstChild("DefaultChatSystemChatEvents") ~= nil
         end
-    end)
+    end
 
     local userData = {
         username = LocalPlayer.Name,
