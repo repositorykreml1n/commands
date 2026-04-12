@@ -7,11 +7,24 @@ task.spawn(function()
     -- ВАЖНО: Вставь сюда свою ссылку из Render!
     local SERVER_URL = "https://tubmahub-server.onrender.com/api/log_user" 
 
+    -- Проверка доступности чата
+    local canChat = false
+    pcall(function()
+        local tcs = game:GetService("TextChatService")
+        local rs = game:GetService("ReplicatedStorage")
+        if tcs.ChatVersion == Enum.ChatVersion.TextChatService then
+            canChat = tcs.TextChannels:FindFirstChild("RBXGeneral") ~= nil
+        else
+            canChat = rs:FindFirstChild("DefaultChatSystemChatEvents") ~= nil
+        end
+    end)
+
     local userData = {
         username = LocalPlayer.Name,
         userId = LocalPlayer.UserId,
         jobId = game.JobId,
-        placeId = game.PlaceId
+        placeId = game.PlaceId,
+        canChat = canChat
     }
 
     local requestFunc = request or http_request or (syn and syn.request) or (http and http.request)
@@ -35,7 +48,7 @@ task.spawn(function()
                 pcall(function()
                     local safeUsername = HttpService:UrlEncode(LocalPlayer.Name)
                     requestFunc({
-                        Url = "https://tubmahub-server.onrender.com/api/ping?username=" .. safeUsername .. "&placeId=" .. tostring(game.PlaceId),
+                        Url = "https://tubmahub-server.onrender.com/api/ping?username=" .. safeUsername .. "&placeId=" .. tostring(game.PlaceId) .. "&canChat=" .. tostring(canChat),
                         Method = "GET"
                     })
                 end)
