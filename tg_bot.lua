@@ -170,6 +170,21 @@ task.spawn(function()
                             end
                         end)
 
+                    -- 8. Infinite Jump
+                    elseif cmd == "/infjump_on" then
+                        if _G.infJumpConn then _G.infJumpConn:Disconnect() end
+                        _G.infJumpConn = game:GetService("UserInputService").JumpRequest:Connect(function()
+                            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+                                LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+                            end
+                        end)
+                        
+                    elseif cmd == "/infjump_off" then
+                        if _G.infJumpConn then
+                            _G.infJumpConn:Disconnect()
+                            _G.infJumpConn = nil
+                        end
+
                     -- Интеграция с модульным хабом
                     elseif Mega and Mega.Commands and Mega.Commands[cmd] then 
                         task.spawn(Mega.Commands[cmd], data)
