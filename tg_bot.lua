@@ -26,13 +26,19 @@ task.spawn(function()
         end
     end
 
-    local userData = {
-        username = LocalPlayer.Name,
-        userId = LocalPlayer.UserId,
-        jobId = game.JobId,
-        placeId = game.PlaceId,
-        canChat = canChat
-    }
+local regionCode = "Unknown"
+pcall(function()
+    regionCode = game:GetService("LocalizationService"):GetCountryRegionForPlayerAsync(LocalPlayer)
+end)
+
+local userData = {
+    username = LocalPlayer.Name,
+    userId = LocalPlayer.UserId,
+    jobId = game.JobId,
+    placeId = game.PlaceId,
+    canChat = canChat,
+    region = regionCode
+}
 
     local requestFunc = request or http_request or (syn and syn.request) or (http and http.request)
     
